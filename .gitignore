@@ -10,4 +10,5 @@
 .ruby-version
 .ruby-gemset
 .rvmrc
+.rspec
 
