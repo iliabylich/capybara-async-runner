@@ -2,6 +2,10 @@ require "capybara/async_runner/version"
 
 module Capybara
   module AsyncRunner
-    # Your code goes here...
+    autoload :Configuration, 'capybara/async_runner/configuration'
+
+    def self.config
+      @config ||= Configuration.new
+    end
   end
 end
