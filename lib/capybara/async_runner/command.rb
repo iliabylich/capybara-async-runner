@@ -22,4 +22,9 @@ class Capybara::AsyncRunner::Command
   def js_builder
     @js_builder ||= Capybara::AsyncRunner::JsBuilder.new(@env, erb)
   end
+
+  def self.inherited(klass)
+    super
+    Capybara::AsyncRunner::Registry << klass
+  end
 end

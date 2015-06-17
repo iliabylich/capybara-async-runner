@@ -15,4 +15,12 @@ describe Capybara::AsyncRunner do
       expect(Capybara::AsyncRunner.config.commands_directory).to eq(nil)
     end
   end
+
+  describe '.run' do
+    it 'running commands using shortcut' do
+      $requesting = 'from-context'
+      result = Capybara::AsyncRunner.run(:with_result, number: 123)
+      expect(result).to eq(246)
+    end
+  end
 end

@@ -9,9 +9,14 @@ module Capybara
     autoload :Env, 'capybara/async_runner/env'
     autoload :JsBuilder, 'capybara/async_runner/js_builder'
     autoload :WaitHelper, 'capybara/async_runner/wait_helper'
+    autoload :Registry, 'capybara/async_runner/registry'
 
     def self.config
       @config ||= Configuration.new
+    end
+
+    def self.run(command_name, data = {})
+      Registry[command_name].new(data).invoke
     end
   end
 end
