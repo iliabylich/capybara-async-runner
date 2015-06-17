@@ -1,23 +1,25 @@
 require 'securerandom'
+require 'capybara/async_runner/commands/configuration'
+require 'capybara/async_runner/commands/responders'
+require 'capybara/async_runner/commands/templates'
 
 class Capybara::AsyncRunner::Command
-  class << self
-    attr_writer :command_name, :file_to_run
+  include Capybara::AsyncRunner::Commands::Configuration
+  include Capybara::AsyncRunner::Commands::Responders
+  include Capybara::AsyncRunner::Commands::Templates
 
-    def command_name
-      @command_name or raise NotImplementedError, "You need to define self.command_name = ... in #{self}"
-    end
-
-    def file_to_run
-      @file_to_run or raise NotImplementedError, "You need to define self.file_to_run = ... in #{self}"
-    end
+  def initialize(data = {})
+    @uuid = SecureRandom.uuid
+    @env = Capybara::AsyncRunner::Env.new(uuid, data, responders)
   end
 
-  def uuid
-    @uuid ||= SecureRandom.uuid
+  attr_reader :uuid, :env
+
+  def invoke
+    js_builder.result
   end
 
-  def run
-    raise NotImplementedError
+  def js_builder
+    @js_builder ||= Capybara::AsyncRunner::JsBuilder.new(@env, erb)
   end
 end

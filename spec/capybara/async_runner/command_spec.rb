@@ -1,38 +1,8 @@
 require 'spec_helper'
 
 describe Capybara::AsyncRunner::Command do
-  context 'name configuration' do
-    context 'when configured' do
-      it 'just returns it' do
-        expect(ConfiguredCommand.command_name).to eq('configured_command')
-      end
-    end
-
-    context 'when not configured' do
-      it 'raises error' do
-        expect { BlankCommand.command_name }.
-          to raise_error('You need to define self.command_name = ... in BlankCommand')
-      end
-    end
-  end
-
-  context 'filename configuration' do
-    context 'when configured' do
-      it 'just returns it' do
-        expect(ConfiguredCommand.file_to_run).to eq('configured_file_to_run')
-      end
-    end
-
-    context 'when not configured' do
-      it 'raises error' do
-        expect { BlankCommand.file_to_run }.
-          to raise_error('You need to define self.file_to_run = ... in BlankCommand')
-      end
-    end
-  end
-
   context 'auto-generated uuid' do
-    subject(:command) { BlankCommand.new }
+    subject(:command) { TestCommand.new }
 
     it 'is a long string' do
       expect(command.uuid).to be_a(String)
@@ -40,6 +10,42 @@ describe Capybara::AsyncRunner::Command do
 
     it 'is memoized' do
       expect(command.uuid).to eq(command.uuid)
+    end
+  end
+
+  context '#invoke' do
+    let(:command) { TestCommand.new(data) }
+    let(:data) { {} }
+    subject(:result) { command.invoke }
+
+    context 'when requesting for a local variable' do
+      before { $requesting =  'local-variable' }
+      it { is_expected.to eq('local-variable') }
+    end
+
+    context 'when requesting for a data from context' do
+      before { $requesting = 'from-context' }
+      let(:data) { { number: 15 } }
+      it { is_expected.to eq(30) }
+    end
+
+    context 'when requesting as callback' do
+      before { $requesting = 'as-callback' }
+      it { is_expected.to eq('as-callback') }
+    end
+
+    context 'when requesting for something with post-processing' do
+      before { $requesting = 'with-processing' }
+      let(:expected) { { 'a' => 1, 'b' => 2, 'c' => 'three' } }
+      it { is_expected.to eq(expected) }
+    end
+
+    context 'when command fails with timeout' do
+      let(:command) { InfiniteCommand.new(data) }
+
+      it 'raises error' do
+        expect { result }.to raise_error(Capybara::AsyncRunner::FailedToFetchResult)
+      end
     end
   end
 end

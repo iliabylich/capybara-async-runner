@@ -1,7 +1,15 @@
 ROOT = Pathname.new(File.expand_path('../..', __FILE__))
-$: << ROOT.join('lib')
+$LOAD_PATH << ROOT.join('lib')
 
+require 'rspec/its'
+
+require 'pry'
 require 'capybara/async_runner'
+require 'capybara'
+require 'capybara/poltergeist'
+
+Capybara.run_server = false
+Capybara.default_driver = :poltergeist
 
 # support files
 Dir[ROOT.join('spec/support/**/*.rb')].each { |f| require f }

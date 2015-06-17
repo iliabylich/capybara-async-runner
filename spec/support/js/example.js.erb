@@ -1,0 +1,18 @@
+setTimeout(function() {
+  <% case $requesting
+    when 'local-variable' %>
+    var localVariable = 'local-variable';
+    <%= done2(js[:localVariable]) %>
+  <% when 'from-context' %>
+    var multiplier = 2;
+    var localVariable = <%= data[:number] %> * multiplier;
+    <%= done3(js[:localVariable]) %>
+  <% when 'as-callback' %>
+    (function(cb) {
+      cb('as-callback')
+    })(<%= done4 %>)
+  <% when 'with-processing' %>
+    var jsonVariable = JSON.stringify({a: 1, b: 2, c: 'three'});
+    <%= done5(js[:jsonVariable]) %>
+  <% end %>
+}, 0)
