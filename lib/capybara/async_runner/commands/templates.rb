@@ -1,3 +1,5 @@
+# Just a module for reading erb files
+#
 module Capybara::AsyncRunner::Commands
   module Templates
     def erb

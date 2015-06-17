@@ -1,6 +1,32 @@
+# This module allows to run a code periodically
+#  and check for its returning value
+#
 module Capybara::AsyncRunner::WaitHelper
   extend self
 
+  # Calls provided +block+ every 100ms
+  #   and stops when it returns false
+  #
+  # @param timeout [Fixnum]
+  # @yield block for execution
+  #
+  # @example
+  #   current_time = Time.now
+  #   Capybara::AsyncRunner::WaitHelper.wait_until(3) do
+  #     Time.now - current_time > 2
+  #   end
+  #
+  #   # 2 seconds later ...
+  #   # => true
+  #
+  #   current_time = Time.now
+  #   Capybara::AsyncRunner::WaitHelper.wait_until(3) do
+  #     Time.now - current_time > 10
+  #   end
+  #
+  #   # 3 seconds later (after timeout)
+  #   # => false
+  #
   def wait_until(timeout, &block)
     begin
       Timeout.timeout(timeout) do

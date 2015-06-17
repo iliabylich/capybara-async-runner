@@ -1,4 +1,12 @@
+require 'erb'
+
+# Internal class for executing javascript code.
+#  Don't use directly
+#
 class Capybara::AsyncRunner::JsBuilder
+  # @param env [Capybara::AsyncRunner::Env] context of erb
+  # @param erb [String] erb template with js code
+  #
   def initialize(env, erb)
     @env = env
     @erb = erb
@@ -6,6 +14,12 @@ class Capybara::AsyncRunner::JsBuilder
 
   attr_reader :env, :erb
 
+  # Executes provided code and returns its result
+  #
+  # @return [Object]
+  #
+  # @raise [Capybara::AsyncRunner::FailedToFetchResult] when javascript VM doesn't have any response after timeout
+  #
   def result
     Capybara.current_session.evaluate_script(calculation_code)
 
