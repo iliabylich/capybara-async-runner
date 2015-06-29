@@ -1,0 +1,29 @@
+function isWrapperReady() {
+  return (typeof(Dexie) !== 'undefined');
+}
+
+function injectScript(src) {
+  var fileref = document.createElement('script')
+  fileref.setAttribute("type","text/javascript")
+  fileref.setAttribute("src", src);
+  document.getElementsByTagName("head")[0].appendChild(fileref)
+}
+
+if (isWrapperReady()) {
+  <%= success %>
+} else {
+  injectScript("<%= data[:url] %>");
+
+  setInterval(function() {
+    if (isWrapperReady()) {
+      <%= success %>
+    }
+  }, 100);
+
+  setTimeout(function () {
+    if (typeof(Dexie) === 'undefined') {
+      <%= error %>
+    }
+  }, 3000);
+}
+

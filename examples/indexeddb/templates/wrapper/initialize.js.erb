@@ -1,0 +1,18 @@
+window.errorHandler = function(err) {
+  <%= error(js[:err]) %>
+}
+
+if (typeof(Dexie) === 'undefined') {
+  errorHandler('No Dexie');
+} else {
+  window.db = new Dexie('demo91');
+  window.db.version(1).stores({
+    users: '++id,name'
+  });
+
+  window.db.open().catch(function(err) {
+    errorHandler('failed to open indexedDB ' + err);
+  }).then(function() {
+    <%= success %>
+  });
+}

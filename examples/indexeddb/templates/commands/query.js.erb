@@ -1,0 +1,15 @@
+var store = window.db['<%= data[:store] %>'];
+var methodsPayload = JSON.parse(<%= data[:methods].to_json.inspect %>);
+
+methodsPayload.forEach(function(methodPayload) {
+  var method = methodPayload['method'];
+  var arguments = methodPayload['arguments'];
+  console.log("Executing", method, "with", arguments);
+  store = store[method].apply(store, arguments);
+});
+
+store.then(function(data) {
+  <%= success(js[:data]) %>
+}).catch(function(err) {
+  <%= error(js[:err]) %>
+})

@@ -1,0 +1,8 @@
+var store = window.db['<%= data[:store] %>'];
+var dataToInsert = JSON.parse(<%= data[:data].to_json.inspect %>);
+
+store.add(dataToInsert).then(function(user_id) {
+  <%= success(js[:user_id]) %>
+}).catch(function(err) {
+  <%= error(js[:err]) %>
+})
