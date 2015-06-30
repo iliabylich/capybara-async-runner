@@ -1,5 +1,7 @@
 # Capybara::AsyncRunner
 
+[![Code Climate](https://codeclimate.com/github/iliabylich/capybara-async-runner/badges/gpa.svg)](https://codeclimate.com/github/iliabylich/capybara-async-runner)
+
 This is a ruby gem for running asynchronous JavaScript code synchronously with Capybara.
 
 ## Installation
