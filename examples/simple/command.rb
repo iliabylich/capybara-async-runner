@@ -25,10 +25,10 @@ class TestCommand < Capybara::AsyncRunner::Command
   end
 end
 
-# I'm using poltergeist here, but you can use whatever you want
+# I'm using poltergeist as a webdriver here, but you can use whatever you want
 require 'capybara/poltergeist'
 
-# My command is abstract, so I'm running it in 'about:blank'
+# My command is totally abstract, so I'm running it in context of 'about:blank' page
 Capybara.run_server = false
 Capybara.default_driver = :poltergeist
 
