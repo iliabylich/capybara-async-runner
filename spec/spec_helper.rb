@@ -1,3 +1,7 @@
+require 'pathname'
+require 'bundler'
+Bundler.setup
+
 ROOT = Pathname.new(File.expand_path('../..', __FILE__))
 $LOAD_PATH << ROOT.join('lib')
 
