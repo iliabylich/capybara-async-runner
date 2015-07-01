@@ -27,6 +27,45 @@ Or install it yourself as:
 Read [this](http://ilyabylich.svbtle.com/capybara-and-asynchronous-stuff) blog post first.
 Then check out `examples` dir.
 
+## How to use
+
++ Setup a directory with command templates
+
+``` ruby
+Capybara::AsyncRunner.setup do |config|
+  config.commands_directory = Rails.root.join('directory/with/templates')
+end
+```
+
++ Create a command
+
+``` ruby
+class MyCommand < Capybara::AsyncRunner::Command
+  # specify the name
+  self.command_name = :my_command
+  # specify a path to template
+  self.template = 'template_name'
+  # specify a response
+  response :done
+end
+```
+
++ Create a template file
+
+``` javascript
+// directory/with/templates/template_name.js.erb
+yourCode(function(data) {
+  <%= done(js[:data]) %>
+})
+```
+
++ Call the command
+
+``` ruby
+Capybara::AsyncRunner.run(:my_command)
+# => data from your script
+```
+
 ## Contributing
 
 1. Fork it ( https://github.com/[my-github-username]/capybara-async_runner/fork )
